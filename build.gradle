@@ -11,10 +11,6 @@ plugins {
     id 'jacoco'
 }
 
-application {
-    mainClassName = 'school.hei.poja.PojaApplication'
-}
-
 jacoco {
     toolVersion = "0.8.11"
 }
