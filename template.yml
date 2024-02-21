@@ -11,12 +11,7 @@ Globals:
       - x86_64
     Timeout: 600
     
-    VpcConfig:
-      SecurityGroupIds:
-        - !Sub '{{resolve:ssm:/poja-sary/sg/id}}'
-      SubnetIds:
-        - !Sub '{{resolve:ssm:/poja-sary/subnet/private1/id}}'
-        - !Sub '{{resolve:ssm:/poja-sary/subnet/private2/id}}'
+    
     Environment:
       Variables:
         ENV: !Ref Env
@@ -38,6 +33,13 @@ Parameters:
     Type: String
 
 Resources:
+  FrontalServerlessRestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      BinaryMediaTypes:
+        - "*~1*"
+
   FrontalFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -53,6 +55,8 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+            RestApiId:
+              Ref: FrontalServerlessRestApi
 
   WorkerFunction:
     Type: AWS::Serverless::Function
